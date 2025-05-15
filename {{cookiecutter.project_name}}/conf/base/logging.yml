@@ -40,6 +40,10 @@ handlers:
         base_dir: logs/journals
         formatter: json_formatter
 
+    rich:
+        class: kedro.logging.RichHandler
+        rich_tracebacks: True
+
 loggers:
     anyconfig:
         level: WARNING
@@ -63,4 +67,4 @@ loggers:
 
 root:
     level: INFO
-    handlers: [console, info_file_handler, error_file_handler]
+    handlers: [rich, info_file_handler, error_file_handler]

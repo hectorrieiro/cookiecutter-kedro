@@ -7,25 +7,17 @@ conf/local/**
 
 # ignore potentially sensitive credentials files
 conf/**/*credentials*
+#allow the local credentials that should only have local testing credentials
+\!conf/local/credentials.yaml
+
 
 # ignore everything in the following folders
 data/**
 logs/**
-references/**
-results/**
 
-# except their sub-folders
-!data/**/
-!logs/**/
-!references/**/
-!results/**/
 
 # also keep all .gitkeep files
 !.gitkeep
-
-# keep also the example dataset
-!data/01_raw/iris.csv
-
 
 ##########################
 # Common files
@@ -162,3 +154,17 @@ venv.bak/
 
 # PyCharm
 .idea/
+
+# mlflow local runs
+mlruns/*
+
+
+__blobstorage__
+
+
+!*.dvc
+
+tmp/
+__azurite_db_blob__.json
+__azurite_db_blob_extent__.json
+.vscode

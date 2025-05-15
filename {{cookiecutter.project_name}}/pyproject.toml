@@ -1,35 +1,138 @@
-[tool.poetry]
+[project]
 name = "{{cookiecutter.project_name}}"
 version = "0.1.0"
-description = "A ML pipeline for your data-science lifecycles, such as EDA, Feature Engineering, Experiment, and Evaluation."
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
 authors = ["{{cookiecutter.github_user_name}}"]
 
-[tool.poetry.dependencies]
-python = ">=3.6, <3.8"
-kedro = "^0.15.5"
-kedro-viz = "^3.1.0"
-honcho = "^1.0.1"
-python-dotenv = "^0.11.0"
-jupyterlab = { version = "^1.2.6", optional = true }
-jupyter_nbextensions_configurator = { version = "^0.4.1", optional = true }
-jupyter-tensorboard = { version = "^0.1.10", optional = true }
-plotly = { version = "^4.5.0", optional = true }
-ipywidgets = { version = "^7.5.1", optional = true }
-nbbrowserpdf = { version = "^0.2.0", optional = true }
+dependencies = [
+  "kedro>=0.19.12",
+  "kedro-datasets>=7.0.0",
+  "kedro-viz>=11.0.1",
+  "torch>=2.7.0",
+  "torchvision>=0.21",
+  "jupyterlab",
+  "jupyter_nbextensions_configurator",
+  "nbbrowserpdf"
 
-[tool.poetry.dev-dependencies]
-isort = "^4.3.21"
-autoflake = "^1.3.1"
-black = "^19.10b0"
-mypy = "^0.761"
-vulture = "^1.2"
-pytest = "^5.3.2"
-pytest-cov = "^2.8.1"
-pytest-xdist = "^1.31.0"
+]
 
-[tool.poetry.extras]
-jupyter = ["jupyterlab", "jupyter_nbextensions_configurator", "jupyter-tensorboard", "plotly", "ipywidgets", "nbbrowserpdf"]
 
 [build-system]
-requires = ["poetry>=1.0.0"]
-build-backend = "poetry.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.kedro]
+package_name = "{{cookiecutter.project_slug}}"
+project_name = "{{cookiecutter.project_name}}"
+kedro_init_version = "0.19.2"
+tools = "['Linting', 'Testing', 'Custom Logging', 'Documentation', 'Kedro Viz']"
+example_pipeline = "False"
+source_dir = "src"
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cpu-mps", marker = "sys_platform != 'linux'" },
+  { index = "pytorch-cu128", marker = "sys_platform == 'linux'" },
+]
+torchvision = [
+  { index = "pytorch-cpu", marker = "sys_platform != 'linux'" },
+  { index = "pytorch-cu128", marker = "sys_platform == 'linux'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu-mps"
+url = "https://download.pytorch.org/whl/nightly/cpu" #nightly for MPS support
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[project.scripts]
+"{{cookiecutter.project_name}}" = "{{cookiecutter.project_slug}}.__main__:main"
+
+[project.optional-dependencies]
+docs = [
+    "docutils",
+    "sphinx",
+    "sphinx_rtd_theme",
+    "nbsphinx",
+    "sphinx-autodoc-typehints",
+    "sphinx_copybutton",
+    "ipykernel",
+    "Jinja2",
+    "myst-parser"
+]
+dev = [
+    "pytest-cov",
+    "pytest-mock",
+    "pytest",
+    "ruff"
+]
+
+[project.entry-points."kedro.hooks"]
+
+[tool.pytest.ini_options]
+addopts = """
+--cov-report term-missing \
+--cov src/phonetracking -ra"""
+
+[tool.coverage.report]
+fail_under = 0
+show_missing = true
+exclude_lines = ["pragma: no cover", "raise NotImplementedError"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff]
+exclude=[
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+    "notebooks",
+    "resources",
+]
+line-length = 88
+show-fixes = true
+select = [
+    "F",   # Pyflakes
+    "W",   # pycodestyle
+    "E",   # pycodestyle
+    "I",   # isort
+    "UP",  # pyupgrade
+    "PL",  # Pylint
+    "T201", # Print Statement
+]
+ignore = ["E501"]  # Ruff format takes care of line-too-long
+
+[tool.kedro_telemetry]
+project_id = "ab8b017e2d8348b2ba6d312424dd72db"
+
+
