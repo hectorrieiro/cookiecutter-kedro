@@ -6,7 +6,7 @@ from kedro.framework.project import configure_project
 
 
 def main(*args, **kwargs) -> Any:
-    package_name = {{cookiecutter.slug_name}}
+    package_name = {{cookiecutter.project_slug}}
     configure_project(package_name)
 
     interactive = hasattr(sys, "ps1")
